@@ -8,6 +8,7 @@ import org.example.project.domain.repository.ProductRepository
 import org.example.project.domain.usecase.GetProductUseCase
 import org.example.project.domain.usecase.SearchProductsUseCase
 import org.example.project.presentation.viewmodel.ProductViewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule =
@@ -31,10 +32,5 @@ val appModule =
             SearchProductsUseCase(get())
         }
 
-        factory {
-            ProductViewModel(
-                get(),
-                get(),
-            )
-        }
+        viewModel { ProductViewModel(get(), get()) }
     }

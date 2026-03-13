@@ -13,17 +13,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import org.example.project.presentation.screens.ProductListScreen
 import org.jetbrains.compose.resources.painterResource
-
 import productbrowserkmp.composeapp.generated.resources.Res
 import productbrowserkmp.composeapp.generated.resources.compose_multiplatform
 
 @Composable
-@Preview
 fun App() {
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-
-        }
+        ProductListScreen(
+            onProductClick = {},
+        )
     }
+}

@@ -1,5 +1,7 @@
 package org.example.project.presentation.viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,16 +12,18 @@ import org.example.project.domain.usecase.GetProductUseCase
 import org.example.project.domain.usecase.SearchProductsUseCase
 import org.example.project.presentation.state.ProductUiState
 
+
+
 class ProductViewModel(
     private val getProductUseCase: GetProductUseCase,
     private val searchProductsUseCase: SearchProductsUseCase,
-) {
-    private val scope = CoroutineScope(Dispatchers.Main)
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
     val uiState: StateFlow<ProductUiState> = _uiState.asStateFlow()
 
     fun loadProducts() {
-        scope.launch {
+        viewModelScope.launch {
             try {
                 val products = getProductUseCase()
                 _uiState.value = ProductUiState.Success(products)
@@ -30,10 +34,9 @@ class ProductViewModel(
     }
 
     fun searchProducts(query: String) {
-        scope.launch {
+        viewModelScope.launch {
             try {
                 val products = searchProductsUseCase(query)
-
                 _uiState.value = ProductUiState.Success(products)
             } catch (e: Exception) {
                 _uiState.value = ProductUiState.Error(e.message ?: "Unknown error")
