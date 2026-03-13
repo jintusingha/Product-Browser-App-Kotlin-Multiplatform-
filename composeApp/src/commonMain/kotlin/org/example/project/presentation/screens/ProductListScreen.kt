@@ -1,7 +1,5 @@
 package org.example.project.presentation.screens
 
-
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -47,11 +45,12 @@ fun ProductListScreen(
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 16.dp)
-            .windowInsetsPadding(WindowInsets.statusBars),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 16.dp)
+                .windowInsetsPadding(WindowInsets.statusBars),
     ) {
         Spacer(Modifier.height(12.dp))
 
@@ -83,10 +82,14 @@ fun ProductListScreen(
             shape = RoundedCornerShape(14.dp),
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = {
-                if (query.isBlank()) viewModel.loadProducts()
-                else viewModel.searchProducts(query)
-            }),
+            keyboardActions =
+                KeyboardActions(onSearch = {
+                    if (query.isBlank()) {
+                        viewModel.loadProducts()
+                    } else {
+                        viewModel.searchProducts(query)
+                    }
+                }),
         )
 
         Spacer(Modifier.height(16.dp))
@@ -145,11 +148,15 @@ fun ProductListScreen(
 }
 
 @Composable
-private fun ProductCard(product: Product, onClick: () -> Unit) {
+private fun ProductCard(
+    product: Product,
+    onClick: () -> Unit,
+) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -159,10 +166,11 @@ private fun ProductCard(product: Product, onClick: () -> Unit) {
                 model = product.thumbnail,
                 contentDescription = product.title,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                modifier =
+                    Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
             )
 
             Spacer(Modifier.width(14.dp))
