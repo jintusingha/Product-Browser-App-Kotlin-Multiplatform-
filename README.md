@@ -1,39 +1,98 @@
-<<<<<<< HEAD
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Product Browser App — Kotlin Multiplatform
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
-
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+A Kotlin Multiplatform Mobile (KMM) app built with Compose Multiplatform, targeting Android and iOS. The app consumes product data from [DummyJSON](https://dummyjson.com/docs/products) and allows users to browse, search, and filter products by category.
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
-=======
-# Product-Browser-App-Kotlin-Multiplatform-
->>>>>>> 3fde93014c90875908fe9c725ad30012206fee60
+## Business Requirements
+
+- View a list of products showing name, price, thumbnail, brand, and rating
+- Tap a product to view detailed information including title, description, brand, price, and rating
+- Search products by keyword using the API
+- Filter products by category using filter chips
+
+---
+
+## Project Architecture
+
+The app follows **Clean Architecture** with three layers:
+
+### Data Layer
+- `ProductDto` — raw API response model
+- `ProductRemoteDataSourceImpl` — makes API calls using Ktor
+- `ProductRepositoryImpl` — implements the domain repository
+- `ProductMapper` — maps `ProductDto` to `Product` domain model
+- `HttpClientFactory` — creates the Ktor HTTP client (OkHttp on Android, Darwin on iOS)
+
+### Domain Layer
+- `Product` — domain model
+- `ProductRepository` — repository interface
+- `GetProductsUseCase` — fetches all products
+- `SearchProductsUseCase` — searches products by keyword
+
+### Presentation Layer
+- `ProductViewModel` — manages UI state using `StateFlow`
+- `ProductUiState` — sealed class with Loading, Success, Error states
+- `ProductListScreen` — displays product list with search bar and category filter chips
+- `ProductDetailScreen` — displays full product details
+
+### Navigation
+- `ScreenRoute` — sealed class defining all app routes
+- `AppNavHost` — Compose Navigation host wiring all screens
+
+### Dependency Injection
+- Koin is used for DI (`koin-core`, `koin-compose`, `koin-compose-viewmodel`)
+
+---
+
+## How to Build and Run
+
+### Prerequisites
+- Android Studio Hedgehog or later
+- JDK 11+
+
+### Android
+
+1. Clone the repository:
+```
+git clone https://github.com/jintusingha/Product-Browser-App-Kotlin-Multiplatform-.git
+```
+2. Open the project in Android Studio
+3. Wait for Gradle sync to complete
+4. Select an Android emulator or physical device
+5. Click **Run**
+
+### iOS
+
+The app is configured to target iOS (iosArm64, iosSimulatorArm64) using Kotlin Multiplatform and Compose Multiplatform. However, the iOS build has not been tested due to unavailability of a Mac machine and Xcode during development.
+
+To build for iOS you would need:
+- A Mac machine
+- Xcode 15+
+- Open `iosApp/iosApp.xcodeproj` in Xcode and run
+
+---
+
+## Running Tests
+
+```
+./gradlew :composeApp:testDebugUnitTest --rerun-tasks
+```
+
+Test report available at:
+```
+composeApp/build/reports/tests/testDebugUnitTest/index.html
+```
+
+---
+
+## Trade-offs and Assumptions
+
+- **No local caching** — products are fetched fresh every time the app launches. Could be improved with SQLDelight for offline support.
+- **String-based navigation** — used string-based route navigation instead of type-safe navigation to keep it consistent with production app patterns.
+- **Only productId passed in nav route** — full product data is looked up from ViewModel memory to avoid URL encoding issues with special characters in product titles and descriptions.
+- **Ktor engine** — using OkHttp for Android and Darwin for iOS. CIO engine caused runtime crashes on Android so it was replaced.
+- **Koin for DI** — used Koin instead of manual DI for cleaner and more scalable code across the shared module.
+- **Coil3 for images** — used Coil3 as it is the only image loading library with full KMP/Compose Multiplatform support.
+- **iOS not tested** — iOS build is configured in the project but could not be verified due to unavailability of a Mac/Xcode environment during development.
+- **Brand and category are nullable** — not all products from DummyJSON include brand or category so these are treated as optional fields.
