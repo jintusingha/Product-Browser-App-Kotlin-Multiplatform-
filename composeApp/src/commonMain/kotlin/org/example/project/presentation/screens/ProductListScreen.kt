@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,7 +36,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
-    viewModel: ProductViewModel=koinViewModel(),
+    viewModel: ProductViewModel = koinViewModel(),
     onProductClick: (Product) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -126,6 +127,50 @@ fun ProductListScreen(
             }
 
             is ProductUiState.Success -> {
+                // ── Category filter chips ───────────────────────────
+
+                val categories =
+                    remember(state.allProducts) {
+                        state.allProducts
+                            .mapNotNull { it.category }
+                            .distinct()
+                            .sorted()
+                    }
+
+                if (categories.isNotEmpty()) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(end = 8.dp),
+                    ) {
+                        item {
+                            FilterChip(
+                                selected = state.selectedCategory == null,
+                                onClick = { viewModel.filterByCategory(null) },
+                                label = { Text("All") },
+                            )
+                        }
+
+                        items(categories) { category ->
+
+                            FilterChip(
+                                selected = state.selectedCategory == category,
+                                onClick = { viewModel.filterByCategory(category) },
+                                label = {
+                                    Text(
+                                        text =
+                                            category
+                                                .replace("-", " ")
+                                                .replaceFirstChar { it.uppercase() },
+                                    )
+                                },
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+                }
+
+                // ── Product list ────────────────────────────────────
                 if (state.products.isEmpty()) {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
