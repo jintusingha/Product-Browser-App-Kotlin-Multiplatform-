@@ -8,4 +8,5 @@ data class Product(
     val brand: String?,
     val rating: Double,
     val thumbnail: String,
+    val category: String? = null,
 )

@@ -7,6 +7,8 @@ sealed class ProductUiState {
 
     data class Success(
         val products: List<Product>,
+        val allProducts: List<Product> = products,
+        val selectedCategory: String? = null,
     ) : ProductUiState()
 
     data class Error(

@@ -12,4 +12,5 @@ fun ProductDto.toDomain(): Product =
         brand = brand,
         rating = rating,
         thumbnail = thumbnail,
+        category=category
     )

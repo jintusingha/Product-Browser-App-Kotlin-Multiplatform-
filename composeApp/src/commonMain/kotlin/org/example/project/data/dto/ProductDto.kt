@@ -11,4 +11,5 @@ data class ProductDto(
     val brand: String? = null,
     val rating: Double,
     val thumbnail: String,
+    val category: String? = null,
 )
