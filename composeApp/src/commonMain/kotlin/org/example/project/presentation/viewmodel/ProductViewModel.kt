@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.example.project.domain.model.Product
 import org.example.project.domain.usecase.GetProductUseCase
 import org.example.project.domain.usecase.SearchProductsUseCase
 import org.example.project.presentation.state.ProductUiState
@@ -64,5 +65,9 @@ class ProductViewModel(
                 products = filtered,
                 selectedCategory = category,
             )
+    }
+    fun getProductById(id: Int): Product? {
+        val current = _uiState.value as? ProductUiState.Success ?: return null
+        return current.allProducts.find { it.id == id }
     }
 }

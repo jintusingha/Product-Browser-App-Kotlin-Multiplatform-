@@ -9,27 +9,22 @@ import androidx.navigation.navArgument
 import org.example.project.domain.model.Product
 import org.example.project.presentation.screens.ProductDetailScreen
 import org.example.project.presentation.screens.ProductListScreen
+import org.example.project.presentation.viewmodel.ProductViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
+    val viewModel: ProductViewModel = koinViewModel()
     NavHost(
         navController = navController,
         startDestination = ScreenRoute.ProductList.route,
     ) {
         composable(ScreenRoute.ProductList.route) {
             ProductListScreen(
+                viewModel = viewModel,
                 onProductClick = { product ->
                     navController.navigate(
-                        ScreenRoute.ProductDetail.createRoute(
-                            productId = product.id,
-                            title = product.title,
-                            description = product.description,
-                            price = product.price,
-                            brand = product.brand,
-                            rating = product.rating,
-                            thumbnail = product.thumbnail,
-                            category = product.category,
-                        ),
+                        ScreenRoute.ProductDetail.createRoute(product.id),
                     )
                 },
             )
@@ -40,37 +35,18 @@ fun AppNavHost(navController: NavHostController) {
             arguments =
                 listOf(
                     navArgument("productId") { type = NavType.IntType },
-                    navArgument("title") { type = NavType.StringType },
-                    navArgument("description") { type = NavType.StringType },
-                    navArgument("price") { type = NavType.FloatType },
-                    navArgument("brand") {
-                        type = NavType.StringType
-                        nullable = true
-                    },
-                    navArgument("rating") { type = NavType.FloatType },
-                    navArgument("thumbnail") { type = NavType.StringType },
-                    navArgument("category") {
-                        type = NavType.StringType
-                        nullable = true
-                    },
                 ),
         ) { backStackEntry ->
-            val args = backStackEntry.arguments!!
-            val product =
-                Product(
-                    id = args.getInt("productId"),
-                    title = args.getString("title") ?: "",
-                    description = args.getString("description") ?: "",
-                    price = args.getFloat("price").toDouble(),
-                    brand = args.getString("brand").takeIf { it != "null" },
-                    rating = args.getFloat("rating").toDouble(),
-                    thumbnail = args.getString("thumbnail") ?: "",
-                    category = args.getString("category").takeIf { it != "null" },
+            val productId = backStackEntry.arguments!!.getInt("productId")
+
+            val product = viewModel.getProductById(productId)
+
+            if (product != null) {
+                ProductDetailScreen(
+                    product = product,
+                    onBack = { navController.popBackStack() },
                 )
-            ProductDetailScreen(
-                product = product,
-                onBack = { navController.popBackStack() },
-            )
+            }
         }
     }
 }

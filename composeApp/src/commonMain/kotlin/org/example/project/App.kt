@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
+import org.example.project.presentation.navigation.AppNavHost
 import org.example.project.presentation.screens.ProductListScreen
 import org.jetbrains.compose.resources.painterResource
 import productbrowserkmp.composeapp.generated.resources.Res
@@ -21,8 +23,8 @@ import productbrowserkmp.composeapp.generated.resources.compose_multiplatform
 @Composable
 fun App() {
     MaterialTheme {
-        ProductListScreen(
-            onProductClick = {},
-        )
+        val navController= rememberNavController()
+        AppNavHost(navController=navController)
+
     }
 }

@@ -5,18 +5,7 @@ sealed class ScreenRoute(
 ) {
     object ProductList : ScreenRoute("product_list_route")
 
-    object ProductDetail : ScreenRoute(
-        "product_detail_route/{productId}/{title}/{description}/{price}/{brand}/{rating}/{thumbnail}/{category}",
-    ) {
-        fun createRoute(
-            productId: Int,
-            title: String,
-            description: String,
-            price: Double,
-            brand: String?,
-            rating: Double,
-            thumbnail: String,
-            category: String?,
-        ): String = "product_detail_route/$productId/$title/$description/$price/${brand ?: "null"}/$rating/$thumbnail/${category ?: "null"}"
+    object ProductDetail : ScreenRoute("product_detail_route/{productId}") {
+        fun createRoute(productId: Int) = "product_detail_route/$productId"
     }
 }
