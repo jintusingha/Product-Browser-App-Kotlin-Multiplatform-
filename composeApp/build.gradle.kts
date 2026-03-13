@@ -44,6 +44,11 @@ kotlin {
             implementation("io.ktor:ktor-client-cio:2.3.12")
             implementation("io.ktor:ktor-client-content-negotiation:2.3.12")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.12")
+            // Material Icons (for Search, Clear, Star etc.)
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
+            // Coil3 - KMP image loading
+            implementation("io.coil-kt.coil3:coil-compose:3.1.0")
+            implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
