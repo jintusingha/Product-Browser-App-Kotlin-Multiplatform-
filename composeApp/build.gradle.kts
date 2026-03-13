@@ -63,6 +63,7 @@ kotlin {
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
 
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
