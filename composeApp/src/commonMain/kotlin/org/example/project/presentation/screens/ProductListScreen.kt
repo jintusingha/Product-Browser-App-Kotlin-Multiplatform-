@@ -30,11 +30,12 @@ import coil3.compose.AsyncImage
 import org.example.project.domain.model.Product
 import org.example.project.presentation.state.ProductUiState
 import org.example.project.presentation.viewmodel.ProductViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductListScreen(
-    viewModel: ProductViewModel,
+    viewModel: ProductViewModel=koinViewModel(),
     onProductClick: (Product) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()

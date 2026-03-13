@@ -52,6 +52,8 @@ kotlin {
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
             implementation("io.insert-koin:koin-core:4.0.0")
             implementation("io.insert-koin:koin-compose:4.0.0")
+
+            implementation("io.insert-koin:koin-compose-viewmodel:4.0.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
