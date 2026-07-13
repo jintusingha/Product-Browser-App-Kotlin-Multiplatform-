@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import kotlinx.coroutines.delay
 import org.example.project.domain.model.Product
 import org.example.project.presentation.state.ProductUiState
 import org.example.project.presentation.viewmodel.ProductViewModel
@@ -44,6 +45,15 @@ fun ProductListScreen(
 
     LaunchedEffect(Unit) {
         viewModel.loadProducts()
+    }
+    LaunchedEffect(query) {
+        delay(500)
+
+        if (query.isBlank()) {
+            viewModel.loadProducts()
+        } else {
+            viewModel.searchProducts(query)
+        }
     }
 
     Column(
